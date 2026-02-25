@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>APACHECO — Furniture Culture | All Times Classic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ink: #16120e;
+      --warm-black: #1f1a15;
+      --cream: #f5f0e6;
+      --off-white: #faf7f2;
+      --gold: #c8a96d;
+      --gold-light: #e2c99a;
+      --muted: #8a7b6a;
+      --border: rgba(200,169,109,0.25);
+      --sans: 'Jost', sans-serif;
+      --serif: 'Cormorant Garamond', serif;
+      --display: 'Playfair Display', serif;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--off-white);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 18px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── CURSOR ── */
+    body { cursor: none; }
+    .cursor {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform .15s ease, width .3s ease, height .3s ease, background .3s ease;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: transform .4s cubic-bezier(.17,.67,.83,.67), width .3s, height .3s, opacity .3s;
+      opacity: 0.7;
+    }
+    body:has(a:hover) .cursor, body:has(button:hover) .cursor { width:14px; height:14px; }
+    body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width:52px; height:52px; opacity:0.4; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5vw;
+      height: 80px;
+      transition: background .5s ease, border-color .5s ease;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(250,247,242,0.96);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .nav-logo .wordmark {
+      font-family: var(--display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: .18em;
+      line-height: 1;
+    }
+    .nav-logo .tagline {
+      font-family: var(--sans);
+      font-size: .55rem;
+      font-weight: 300;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 2px;
+    }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-family: var(--sans);
+      font-size: .72rem;
+      font-weight: 300;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--ink);
+      position: relative;
+      transition: color .3s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 100%;
+      height: 1px;
+      background: var(--gold);
+      transition: right .4s cubic-bezier(.4,0,.2,1);
+    }
+    .nav-links a:hover::after { right: 0; }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .btn-outline {
+      font-family: var(--sans);
+      font-size: .65rem;
+      font-weight: 400;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      border: 1px solid var(--gold);
+      padding: .55rem 1.5rem;
+      transition: background .3s, color .3s;
+    }
+    .btn-outline:hover { background: var(--gold); color: var(--off-white); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+    }
+    .hero-left {
+      background: var(--warm-black);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 12vh 5vw 10vh 8vw;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-left::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 20% 70%, rgba(200,169,109,.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(200,169,109,.07) 0%, transparent 50%);
+    }
+    .hero-eyebrow {
+      font-family: var(--sans);
+      font-size: .62rem;
+      font-weight: 300;
+      letter-spacing: .4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp .8s .3s forwards;
+    }
+    .hero-title {
+      font-family: var(--display);
+      font-size: clamp(3rem, 6vw, 6.5rem);
+      font-weight: 400;
+      line-height: 1.0;
+      color: var(--cream);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp .9s .5s forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+    .hero-desc {
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: rgba(245,240,230,.6);
+      max-width: 420px;
+      margin-bottom: 3.5rem;
+      opacity: 0;
+      animation: fadeUp .9s .7s forwards;
+    }
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      opacity: 0;
+      animation: fadeUp .9s .9s forwards;
+    }
+    .btn-primary {
+      font-family: var(--sans);
+      font-size: .7rem;
+      font-weight: 400;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      background: var(--gold);
+      color: var(--warm-black);
+      padding: 1.1rem 2.8rem;
+      transition: background .3s, transform .3s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .btn-ghost {
+      font-family: var(--sans);
+      font-size: .7rem;
+      font-weight: 300;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--cream);
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      transition: gap .3s;
+    }
+    .btn-ghost::after { content: '→'; transition: transform .3s; }
+    .btn-ghost:hover { gap: 1.2rem; }
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-img-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    .hero-img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.08);
+      animation: zoomIn 1.4s .2s cubic-bezier(.4,0,.2,1) forwards;
+    }
+    .hero-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(31,26,21,.4) 0%, transparent 50%);
+    }
+    .hero-badge {
+      position: absolute;
+      bottom: 10%;
+      left: -40px;
+      width: 130px;
+      height: 130px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      animation: fadeUp 1s 1s forwards;
+      opacity: 0;
+    }
+    .hero-badge span:first-child {
+      font-family: var(--display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--warm-black);
+    }
+    .hero-badge span:last-child {
+      font-family: var(--sans);
+      font-size: .52rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--warm-black);
+      line-height: 1.4;
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 3rem;
+      right: 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+      opacity: 0;
+      animation: fadeIn 1s 1.4s forwards;
+    }
+    .hero-scroll span {
+      font-family: var(--sans);
+      font-size: .55rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: rgba(245,240,230,.5);
+      writing-mode: vertical-rl;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s 1.6s infinite;
+    }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(30px); }
+      to { opacity:1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity:0; }
+      to { opacity:1; }
+    }
+    @keyframes zoomIn {
+      from { transform: scale(1.08); }
+      to { transform: scale(1); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity:.4; }
+      50% { opacity:1; }
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-strip {
+      background: var(--gold);
+      padding: .75rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .marquee-inner {
+      display: inline-block;
+      animation: marquee 28s linear infinite;
+    }
+    .marquee-inner span {
+      font-family: var(--sans);
+      font-size: .6rem;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      color: var(--warm-black);
+      padding: 0 2.5rem;
+    }
+    .marquee-inner span.dot {
+      padding: 0;
+      opacity: .5;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── SECTION COMMONS ── */
+    section { padding: 10vmin 8vw; }
+    .section-label {
+      font-family: var(--sans);
+      font-size: .6rem;
+      font-weight: 300;
+      letter-spacing: .4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+    .section-title {
+      font-family: var(--display);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+    .section-title em { font-style: italic; color: var(--muted); }
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      margin: 2rem 0;
+    }
+
+    /* ── ABOUT ── */
+    .about {
+      background: var(--warm-black);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      padding: 0;
+    }
+    .about-text {
+      padding: 10vmin 6vw 10vmin 8vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .about-text .section-label { color: var(--gold); }
+    .about-text .section-title { color: var(--cream); }
+    .about-text .divider { }
+    .about-body {
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.9;
+      color: rgba(245,240,230,.65);
+      margin-bottom: 2.5rem;
+      max-width: 500px;
+    }
+    .about-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: .5rem;
+    }
+    .stat { display: flex; flex-direction: column; gap: .2rem; }
+    .stat-num {
+      font-family: var(--display);
+      font-size: 2.8rem;
+      font-weight: 400;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: var(--sans);
+      font-size: .58rem;
+      font-weight: 300;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: rgba(245,240,230,.45);
+    }
+    .about-visual {
+      position: relative;
+      overflow: hidden;
+      min-height: 600px;
+    }
+    .about-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .8s ease;
+    }
+    .about-visual:hover img { transform: scale(1.03); }
+    .about-visual-caption {
+      position: absolute;
+      bottom: 2rem;
+      left: 2rem;
+      background: rgba(31,26,21,.85);
+      backdrop-filter: blur(8px);
+      padding: 1rem 1.5rem;
+      border-left: 2px solid var(--gold);
+    }
+    .about-visual-caption p {
+      font-family: var(--sans);
+      font-size: .58rem;
+      font-weight: 300;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--cream);
+    }
+
+    /* ── COLLECTIONS ── */
+    .collections { background: var(--off-white); }
+    .collections-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 4rem;
+    }
+    .collections-filter {
+      display: flex;
+      gap: 1rem;
+    }
+    .filter-btn {
+      font-family: var(--sans);
+      font-size: .6rem;
+      font-weight: 300;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      background: none;
+      border: 1px solid rgba(22,18,14,.2);
+      color: var(--muted);
+      padding: .55rem 1.2rem;
+      cursor: none;
+      transition: all .3s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--ink);
+      color: var(--cream);
+      border-color: var(--ink);
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .product-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--cream);
+      cursor: none;
+    }
+    .product-card.featured {
+      grid-column: span 2;
+    }
+    .product-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      position: relative;
+    }
+    .product-card.featured .product-img { aspect-ratio: 16/9; }
+    .product-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .7s cubic-bezier(.4,0,.2,1);
+    }
+    .product-card:hover .product-img img { transform: scale(1.06); }
+    .product-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(22,18,14,0);
+      transition: background .4s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .product-card:hover .product-img-overlay { background: rgba(22,18,14,.35); }
+    .product-quick-view {
+      font-family: var(--sans);
+      font-size: .62rem;
+      font-weight: 400;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--cream);
+      border: 1px solid rgba(245,240,230,.6);
+      padding: .7rem 1.8rem;
+      text-decoration: none;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .3s, transform .3s, background .3s;
+    }
+    .product-card:hover .product-quick-view { opacity:1; transform: translateY(0); }
+    .product-quick-view:hover { background: rgba(200,169,109,.8); border-color: transparent; }
+    .product-tag {
+      position: absolute;
+      top: 1rem; left: 1rem;
+      background: var(--gold);
+      font-family: var(--sans);
+      font-size: .52rem;
+      font-weight: 400;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--warm-black);
+      padding: .3rem .8rem;
+    }
+    .product-info {
+      padding: 1.5rem 1.8rem 2rem;
+    }
+    .product-collection {
+      font-family: var(--sans);
+      font-size: .55rem;
+      font-weight: 300;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .4rem;
+    }
+    .product-name {
+      font-family: var(--display);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: .5rem;
+    }
+    .product-desc {
+      font-size: .9rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .product-price {
+      font-family: var(--display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--ink);
+    }
+    .product-price span {
+      font-family: var(--sans);
+      font-size: .7rem;
+      font-weight: 300;
+      color: var(--muted);
+      margin-left: .3rem;
+    }
+    .btn-add {
+      font-family: var(--sans);
+      font-size: .58rem;
+      font-weight: 400;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      padding: .65rem 1.4rem;
+      cursor: none;
+      transition: background .3s;
+    }
+    .btn-add:hover { background: var(--gold); color: var(--warm-black); }
+
+    /* ── WHY US ── */
+    .why-us {
+      background: var(--cream);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6vw;
+      align-items: center;
+    }
+    .why-us-visual {
+      position: relative;
+    }
+    .why-us-img-main {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+    }
+    .why-us-img-accent {
+      position: absolute;
+      bottom: -3rem;
+      right: -3rem;
+      width: 55%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border: 6px solid var(--cream);
+    }
+    .why-us-content { }
+    .why-us-content .section-label { }
+    .why-list {
+      list-style: none;
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .why-item {
+      display: grid;
+      grid-template-columns: 50px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+      padding: 1.8rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: padding-left .3s;
+    }
+    .why-item:hover { padding-left: .5rem; }
+    .why-item:first-child { border-top: 1px solid var(--border); }
+    .why-num {
+      font-family: var(--display);
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .why-text h4 {
+      font-family: var(--display);
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: .3rem;
+    }
+    .why-text p {
+      font-size: .92rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials {
+      background: var(--warm-black);
+      text-align: center;
+      overflow: hidden;
+    }
+    .testimonials .section-label, .testimonials .section-title { text-align: center; }
+    .testimonials .section-title { color: var(--cream); margin: 0 auto; max-width: 600px; }
+    .testimonials .divider { margin: 2rem auto; }
+    .testimonials-track {
+      display: flex;
+      gap: 2rem;
+      margin-top: 4rem;
+      overflow: hidden;
+    }
+    .testimonial-card {
+      flex: 0 0 calc(33.333% - 1.33rem);
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      padding: 3rem 2.5rem;
+      text-align: left;
+      transition: background .3s;
+    }
+    .testimonial-card:hover { background: rgba(255,255,255,.07); }
+    .stars {
+      display: flex;
+      gap: .3rem;
+      margin-bottom: 1.5rem;
+    }
+    .star {
+      width: 12px; height: 12px;
+      background: var(--gold);
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    }
+    .testimonial-quote {
+      font-size: 1.05rem;
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(245,240,230,.75);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .author-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--display);
+      font-size: 1.1rem;
+      color: var(--warm-black);
+    }
+    .author-info h5 {
+      font-family: var(--sans);
+      font-size: .7rem;
+      font-weight: 400;
+      letter-spacing: .1em;
+      color: var(--cream);
+    }
+    .author-info span {
+      font-family: var(--sans);
+      font-size: .6rem;
+      font-weight: 300;
+      color: var(--muted);
+    }
+
+    /* ── LOYALTY / CTA ── */
+    .loyalty {
+      background: var(--gold);
+      padding: 8vmin 8vw;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6vw;
+      align-items: center;
+    }
+    .loyalty-content .section-label { color: var(--warm-black); opacity: .6; }
+    .loyalty-content .section-title { color: var(--warm-black); }
+    .loyalty-content .divider { background: var(--warm-black); opacity: .3; }
+    .loyalty-body {
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(31,26,21,.75);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+    .loyalty-perks {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .perk {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+    }
+    .perk-icon {
+      width: 28px; height: 28px;
+      background: rgba(31,26,21,.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .9rem;
+      flex-shrink: 0;
+    }
+    .perk-text {
+      font-family: var(--sans);
+      font-size: .65rem;
+      font-weight: 300;
+      letter-spacing: .08em;
+      color: rgba(31,26,21,.8);
+    }
+    .loyalty-form { }
+    .loyalty-form h3 {
+      font-family: var(--display);
+      font-size: 1.8rem;
+      font-weight: 400;
+      color: var(--warm-black);
+      margin-bottom: .5rem;
+    }
+    .loyalty-form p {
+      font-size: .9rem;
+      color: rgba(31,26,21,.65);
+      margin-bottom: 2rem;
+    }
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .form-row input {
+      width: 100%;
+      padding: 1rem 1.2rem;
+      background: rgba(31,26,21,.12);
+      border: 1px solid rgba(31,26,21,.2);
+      font-family: var(--serif);
+      font-size: .95rem;
+      color: var(--warm-black);
+      outline: none;
+      transition: border-color .3s;
+    }
+    .form-row input::placeholder { color: rgba(31,26,21,.45); }
+    .form-row input:focus { border-color: var(--warm-black); }
+    .btn-dark {
+      font-family: var(--sans);
+      font-size: .7rem;
+      font-weight: 400;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      background: var(--warm-black);
+      color: var(--gold);
+      border: none;
+      padding: 1.1rem 2.5rem;
+      cursor: none;
+      width: 100%;
+      transition: background .3s;
+    }
+    .btn-dark:hover { background: var(--ink); }
+    .form-note {
+      font-family: var(--sans);
+      font-size: .6rem;
+      font-weight: 300;
+      color: rgba(31,26,21,.5);
+      margin-top: .8rem;
+      text-align: center;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      padding: 6rem 8vw 3rem;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 4rem;
+      padding-bottom: 4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .footer-brand .wordmark {
+      font-family: var(--display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: .15em;
+      color: var(--cream);
+    }
+    .footer-brand .tagline {
+      font-family: var(--sans);
+      font-size: .55rem;
+      font-weight: 300;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 3px;
+      margin-bottom: 1.5rem;
+    }
+    .footer-brand p {
+      font-size: .92rem;
+      font-weight: 300;
+      color: rgba(245,240,230,.45);
+      line-height: 1.8;
+      max-width: 300px;
+      margin-bottom: 2rem;
+    }
+    .social-links { display: flex; gap: 1rem; }
+    .social-link {
+      width: 36px; height: 36px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      text-decoration: none;
+      font-family: var(--sans);
+      font-size: .75rem;
+      transition: border-color .3s, color .3s;
+    }
+    .social-link:hover { border-color: var(--gold); color: var(--gold); }
+    .footer-col h4 {
+      font-family: var(--sans);
+      font-size: .6rem;
+      font-weight: 400;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .7rem; }
+    .footer-col ul a {
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 300;
+      color: rgba(245,240,230,.45);
+      transition: color .3s;
+    }
+    .footer-col ul a:hover { color: var(--cream); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 2.5rem;
+    }
+    .footer-bottom p {
+      font-family: var(--sans);
+      font-size: .6rem;
+      font-weight: 300;
+      letter-spacing: .1em;
+      color: rgba(245,240,230,.25);
+    }
+    .footer-bottom-links {
+      display: flex;
+      gap: 2rem;
+    }
+    .footer-bottom-links a {
+      font-family: var(--sans);
+      font-size: .6rem;
+      font-weight: 300;
+      letter-spacing: .1em;
+      color: rgba(245,240,230,.25);
+      text-decoration: none;
+      transition: color .3s;
+    }
+    .footer-bottom-links a:hover { color: var(--gold); }
+
+    /* ── REVEAL ANIMATION ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-right { display: none; }
+      .hero-left { min-height: 100vh; }
+      .about, .why-us, .loyalty { grid-template-columns: 1fr; }
+      .about-visual { min-height: 400px; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+      .products-grid { grid-template-columns: 1fr 1fr; }
+      .product-card.featured { grid-column: span 2; }
+      .testimonials-track { flex-direction: column; }
+      .testimonial-card { flex: none; }
+      nav { padding: 0 5vw; }
+      .nav-links, .nav-actions { display: none; }
+    }
+    @media (max-width: 600px) {
+      .products-grid { grid-template-columns: 1fr; }
+      .product-card.featured { grid-column: span 1; }
+      .footer-top { grid-template-columns: 1fr; }
+      .loyalty-perks { grid-template-columns: 1fr; }
+      .collections-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CURSOR -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">
+      <span class="wordmark">APACHECO</span>
+      <span class="tagline">Furniture Culture · Est. 1980</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#collections">Collections</a></li>
+      <li><a href="#about">Heritage</a></li>
+      <li><a href="#loyalty">Membership</a></li>
+      <li><a href="#contact">Atelier</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="#" class="btn-outline">Request Catalogue</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">All Times Classic — Living Collection</p>
+      <h1 class="hero-title">Crafted to<br><em>Endure</em><br>Generations</h1>
+      <p class="hero-desc">Furniture of extraordinary character from Portugal's Capital do Móvel. Each piece is a testament to four decades of artisanal mastery and timeless design.</p>
+      <div class="hero-cta-group">
+        <a href="#collections" class="btn-primary">Explore Collection</a>
+        <a href="#about" class="btn-ghost">Our Story</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-img-container">
+        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&q=85" alt="Classic living room furniture" />
+        <div class="hero-img-overlay"></div>
+        <div class="hero-badge">
+          <span>40+</span>
+          <span>Years of<br>Excellence</span>
+        </div>
+      </div>
+      <div class="hero-scroll">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-strip">
+    <div class="marquee-inner">
+      <span>Classic</span><span class="dot">·</span>
+      <span>Neoclassic</span><span class="dot">·</span>
+      <span>Contemporary</span><span class="dot">·</span>
+      <span>Made in Portugal</span><span class="dot">·</span>
+      <span>Paços de Ferreira</span><span class="dot">·</span>
+      <span>Handcrafted</span><span class="dot">·</span>
+      <span>Free Consultation</span><span class="dot">·</span>
+      <span>Worldwide Delivery</span><span class="dot">·</span>
+      <span>Classic</span><span class="dot">·</span>
+      <span>Neoclassic</span><span class="dot">·</span>
+      <span>Contemporary</span><span class="dot">·</span>
+      <span>Made in Portugal</span><span class="dot">·</span>
+      <span>Paços de Ferreira</span><span class="dot">·</span>
+      <span>Handcrafted</span><span class="dot">·</span>
+      <span>Free Consultation</span><span class="dot">·</span>
+      <span>Worldwide Delivery</span><span class="dot">·</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-text">
+      <p class="section-label reveal">Our Heritage</p>
+      <h2 class="section-title reveal reveal-delay-1">Born in Portugal's<br><em>Furniture Capital</em></h2>
+      <div class="divider reveal reveal-delay-2"></div>
+      <p class="about-body reveal reveal-delay-2">Since 1980, Apacheco has called Paços de Ferreira home — a city synonymous with the finest Portuguese furniture making. From our 2,000 m² atelier, we blend generations of craft knowledge with a forward-looking design vision, creating pieces that define spaces and stand the test of time.</p>
+      <div class="about-stats reveal reveal-delay-3">
+        <div class="stat">
+          <span class="stat-num">40+</span>
+          <span class="stat-label">Years of<br>Craft</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">2k</span>
+          <span class="stat-label">m² Production<br>Atelier</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">35+</span>
+          <span class="stat-label">Countries<br>Delivered</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-visual reveal">
+      <img src="https://images.unsplash.com/photo-1600121848594-d8644e57abab?w=900&q=85" alt="Furniture workshop craftsmanship" />
+      <div class="about-visual-caption">
+        <p>Paços de Ferreira · Portugal</p>
+        <p style="color:rgba(200,169,109,.7);font-size:.52rem;margin-top:2px;">Capital do Móvel</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLECTIONS -->
+  <section class="collections" id="collections">
+    <div class="collections-header">
+      <div>
+        <p class="section-label reveal">Living Room</p>
+        <h2 class="section-title reveal reveal-delay-1">All Times <em>Classic</em></h2>
+      </div>
+      <div class="collections-filter reveal">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Sofas</button>
+        <button class="filter-btn">Tables</button>
+        <button class="filter-btn">Storage</button>
+      </div>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card featured reveal">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1493663284031-b7e3aaa4e47a?w=1200&q=80" alt="Grand Classic Sofa" />
+          <div class="product-img-overlay">
+            <a href="#" class="product-quick-view">View Piece</a>
+          </div>
+          <span class="product-tag">New Arrival</span>
+        </div>
+        <div class="product-info">
+          <p class="product-collection">All Times Classic · Seating</p>
+          <h3 class="product-name">Grand Marquise Sofa</h3>
+          <p class="product-desc">Hand-carved solid wood frame, upholstered in premium Portuguese wool fabric. Available in 8 custom finishes.</p>
+          <div class="product-footer">
+            <div class="product-price">€ 3,850 <span>from</span></div>
+            <button class="btn-add">Request Quote</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card reveal reveal-delay-1">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80" alt="Classic Coffee Table" />
+          <div class="product-img-overlay">
+            <a href="#" class="product-quick-view">View Piece</a>
+          </div>
+        </div>
+        <div class="product-info">
+          <p class="product-collection">All Times Classic · Tables</p>
+          <h3 class="product-name">Douro Coffee Table</h3>
+          <p class="product-desc">Solid walnut with hand-applied lacquer and bevelled glass inset.</p>
+          <div class="product-footer">
+            <div class="product-price">€ 1,290</div>
+            <button class="btn-add">Request Quote</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card reveal reveal-delay-1">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80" alt="Classic Armchair" />
+          <div class="product-img-overlay">
+            <a href="#" class="product-quick-view">View Piece</a>
+          </div>
+          <span class="product-tag">Bestseller</span>
+        </div>
+        <div class="product-info">
+          <p class="product-collection">All Times Classic · Seating</p>
+          <h3 class="product-name">Sintra Accent Chair</h3>
+          <p class="product-desc">Neoclassic silhouette with carved mahogany legs and velvet seat.</p>
+          <div class="product-footer">
+            <div class="product-price">€ 920</div>
+            <button class="btn-add">Request Quote</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card reveal reveal-delay-2">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1551298370-9d3d53740c72?w=600&q=80" alt="Console Table" />
+          <div class="product-img-overlay">
+            <a href="#" class="product-quick-view">View Piece</a>
+          </div>
+        </div>
+        <div class="product-info">
+          <p class="product-collection">All Times Classic · Storage</p>
+          <h3 class="product-name">Cascais Console</h3>
+          <p class="product-desc">Elegant entry console in solid oak with gilded brass hardware.</p>
+          <div class="product-footer">
+            <div class="product-price">€ 1,650</div>
+            <button class="btn-add">Request Quote</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card reveal reveal-delay-2">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1567016432779-094069958ea5?w=600&q=80" alt="Classic Bookshelf" />
+          <div class="product-img-overlay">
+            <a href="#" class="product-quick-view">View Piece</a>
+          </div>
+        </div>
+        <div class="product-info">
+          <p class="product-collection">All Times Classic · Storage</p>
+          <h3 class="product-name">Lisboa Bookcase</h3>
+          <p class="product-desc">Tall library unit with arched crown moulding and adjustable shelving.</p>
+          <div class="product-footer">
+            <div class="product-price">€ 2,100</div>
+            <button class="btn-add">Request Quote</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section class="why-us">
+    <div class="why-us-visual reveal">
+      <img class="why-us-img-main" src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=800&q=80" alt="Craftsman at work" />
+      <img class="why-us-img-accent" src="https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=500&q=80" alt="Furniture detail" />
+    </div>
+    <div class="why-us-content">
+      <p class="section-label reveal">Why Apacheco</p>
+      <h2 class="section-title reveal reveal-delay-1">Crafted with<br><em>Conviction</em></h2>
+      <ul class="why-list">
+        <li class="why-item reveal reveal-delay-1">
+          <span class="why-num">01</span>
+          <div class="why-text">
+            <h4>Handcrafted in Portugal</h4>
+            <p>Every piece is manufactured in our Paços de Ferreira atelier by skilled artisans with decades of experience.</p>
+          </div>
+        </li>
+        <li class="why-item reveal reveal-delay-2">
+          <span class="why-num">02</span>
+          <div class="why-text">
+            <h4>Personalised Service</h4>
+            <p>Custom finishes, fabrics, and dimensions — we tailor every piece to your exact vision and space.</p>
+          </div>
+        </li>
+        <li class="why-item reveal reveal-delay-3">
+          <span class="why-num">03</span>
+          <div class="why-text">
+            <h4>Worldwide Delivery</h4>
+            <p>White-glove delivery and professional installation service available globally.</p>
+          </div>
+        </li>
+        <li class="why-item reveal reveal-delay-4">
+          <span class="why-num">04</span>
+          <div class="why-text">
+            <h4>Lifetime Commitment</h4>
+            <p>Quality built to last generations, backed by our comprehensive after-sales care programme.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <p class="section-label reveal">Client Stories</p>
+    <h2 class="section-title reveal reveal-delay-1">Spaces <em>Transformed</em></h2>
+    <div class="divider"></div>
+    <div class="testimonials-track">
+      <div class="testimonial-card reveal">
+        <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+        <p class="testimonial-quote">"The Marquise sofa has become the soul of our living room. The quality of the wood and the fabric is absolutely exceptional — it feels like it was made for the space."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">M</div>
+          <div class="author-info">
+            <h5>Maria Fernandes</h5>
+            <span>Lisbon, Portugal</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-1">
+        <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+        <p class="testimonial-quote">"We furnished our entire apartment with Apacheco. The personalised consultation process was outstanding and the result is a home we are truly proud of."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">A</div>
+          <div class="author-info">
+            <h5>Antoine Lefèvre</h5>
+            <span>Paris, France</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-2">
+        <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+        <p class="testimonial-quote">"Shipping to London was seamless. The white-glove delivery team was professional and the furniture arrived in perfect condition. Worth every penny."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">J</div>
+          <div class="author-info">
+            <h5>James Whitfield</h5>
+            <span>London, UK</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOYALTY / CTA -->
+  <section class="loyalty" id="loyalty">
+    <div class="loyalty-content">
+      <p class="section-label reveal">Apacheco Circle</p>
+      <h2 class="section-title reveal reveal-delay-1">Become a<br><em>Member</em></h2>
+      <div class="divider reveal reveal-delay-2"></div>
+      <p class="loyalty-body reveal reveal-delay-2">Join the Apacheco Circle and gain exclusive access to new collections before launch, private consultations, and a dedicated design advisor for every project.</p>
+      <div class="loyalty-perks reveal reveal-delay-3">
+        <div class="perk"><div class="perk-icon">✦</div><span class="perk-text">Early Collection Access</span></div>
+        <div class="perk"><div class="perk-icon">✦</div><span class="perk-text">Private Design Consultations</span></div>
+        <div class="perk"><div class="perk-icon">✦</div><span class="perk-text">Member-Only Pricing</span></div>
+        <div class="perk"><div class="perk-icon">✦</div><span class="perk-text">Complimentary Delivery</span></div>
+      </div>
+    </div>
+    <div class="loyalty-form reveal reveal-delay-2">
+      <h3>Join the Circle</h3>
+      <p>Complimentary membership — no commitments, pure privilege.</p>
+      <div class="form-row">
+        <input type="text" placeholder="Your Name" />
+        <input type="email" placeholder="Email Address" />
+        <input type="text" placeholder="City / Country" />
+      </div>
+      <button class="btn-dark">Request Membership</button>
+      <p class="form-note">Your privacy is respected. We never share your details.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contact">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="wordmark">APACHECO</div>
+        <div class="tagline">Furniture Culture</div>
+        <p>Industria de Mobiliário, Paços de Ferreira — Capital do Móvel, Portugal. Crafting timeless interiors for over 40 years.</p>
+        <div class="social-links">
+          <a class="social-link" href="#">in</a>
+          <a class="social-link" href="#">ig</a>
+          <a class="social-link" href="#">pt</a>
+          <a class="social-link" href="#">fb</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Collections</h4>
+        <ul>
+          <li><a href="#">All Times Classic</a></li>
+          <li><a href="#">Living Room</a></li>
+          <li><a href="#">Dining Room</a></li>
+          <li><a href="#">Bedroom</a></li>
+          <li><a href="#">Office</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">Our Heritage</a></li>
+          <li><a href="#">Craftsmanship</a></li>
+          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">Trade Programme</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Atelier</h4>
+        <ul>
+          <li><a href="#">Rua do Mobiliário 124</a></li>
+          <li><a href="#">Paços de Ferreira</a></li>
+          <li><a href="#">4590-000, Portugal</a></li>
+          <li><a href="#">geral@apachecofurniture.pt</a></li>
+          <li><a href="#">+351 255 000 000</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Apacheco – Industria de Mobiliário. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
+    function animRing() {
+      rx += (mx - rx) * .15;
+      ry += (my - ry) * .15;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(animRing);
+    }
+    animRing();
+
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    reveals.forEach(r => obs.observe(r));
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>
